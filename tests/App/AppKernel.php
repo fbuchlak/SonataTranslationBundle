@@ -16,6 +16,7 @@ namespace Sonata\TranslationBundle\Tests\App;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
 use Knp\Bundle\MenuBundle\KnpMenuBundle;
+use Knp\DoctrineBehaviors\DoctrineBehaviorsBundle;
 use Sonata\AdminBundle\SonataAdminBundle;
 use Sonata\BlockBundle\SonataBlockBundle;
 use Sonata\Doctrine\Bridge\Symfony\SonataDoctrineBundle;
@@ -45,7 +46,7 @@ final class AppKernel extends Kernel
 
     public function registerBundles(): iterable
     {
-        return [
+        $bundles = [
             new FrameworkBundle(),
             new KnpMenuBundle(),
             new SecurityBundle(),
@@ -60,6 +61,12 @@ final class AppKernel extends Kernel
             new SonataTranslationBundle(),
             new TwigBundle(),
         ];
+
+        if (class_exists(DoctrineBehaviorsBundle::class)) {
+            $bundles[] = new DoctrineBehaviorsBundle();
+        }
+
+        return $bundles;
     }
 
     public function getCacheDir(): string
@@ -140,6 +147,9 @@ final class AppKernel extends Kernel
                 'gedmo' => [
                     'enabled' => true,
                     'translatable_listener_service' => 'app.gedmo.translation_listener',
+                ],
+                'knplabs' => [
+                    'enabled' => true,
                 ],
             ]);
 
