@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Sonata\TranslationBundle\Tests\Functional;
 
+use Knp\DoctrineBehaviors\DoctrineBehaviorsBundle;
 use Sonata\TranslationBundle\Tests\App\AppKernel;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-final class GedmoCRUDTest extends WebTestCase
+final class KnpCRUDTest extends WebTestCase
 {
     /**
      * @var KernelBrowser
@@ -27,6 +28,11 @@ final class GedmoCRUDTest extends WebTestCase
 
     protected function setUp(): void
     {
+        // NEXT_MAJOR: Remove this check.
+        if (!class_exists(DoctrineBehaviorsBundle::class)) {
+            static::markTestSkipped('knplabs/doctrine-behaviors 3 is needed');
+        }
+
         $this->client = static::createClient();
         $this->client->followRedirects();
     }
@@ -36,7 +42,7 @@ final class GedmoCRUDTest extends WebTestCase
      */
     public function testList(string $locale, string $name): void
     {
-        $url = $this->generateUrlWithLocale('/admin/tests/app/gedmocategory/list', $locale);
+        $url = $this->generateUrlWithLocale('/admin/tests/app/knpcategory/list', $locale);
 
         $this->client->request(Request::METHOD_GET, $url);
 
@@ -59,7 +65,7 @@ final class GedmoCRUDTest extends WebTestCase
      */
     public function testCreate(string $locale, string $newName): void
     {
-        $url = $this->generateUrlWithLocale('/admin/tests/app/gedmocategory/create', $locale);
+        $url = $this->generateUrlWithLocale('/admin/tests/app/knpcategory/create', $locale);
 
         $crawler = $this->client->request(Request::METHOD_GET, $url);
 
@@ -78,7 +84,7 @@ final class GedmoCRUDTest extends WebTestCase
             sprintf('"%s" has been successfully created.', $newName)
         );
 
-        $url = $this->generateUrlWithLocale('/admin/tests/app/gedmocategory/list', $locale);
+        $url = $this->generateUrlWithLocale('/admin/tests/app/knpcategory/list', $locale);
 
         $this->client->request(Request::METHOD_GET, $url);
 
@@ -104,7 +110,7 @@ final class GedmoCRUDTest extends WebTestCase
      */
     public function testEdit(string $locale, string $editedName): void
     {
-        $url = $this->generateUrlWithLocale('/admin/tests/app/gedmocategory/category_novel/edit', $locale);
+        $url = $this->generateUrlWithLocale('/admin/tests/app/knpcategory/category_novel/edit', $locale);
 
         $crawler = $this->client->request(Request::METHOD_GET, $url);
 
@@ -119,7 +125,7 @@ final class GedmoCRUDTest extends WebTestCase
             sprintf('"%s" has been successfully updated.', $editedName)
         );
 
-        $url = $this->generateUrlWithLocale('/admin/tests/app/gedmocategory/list', $locale);
+        $url = $this->generateUrlWithLocale('/admin/tests/app/knpcategory/list', $locale);
 
         $this->client->request(Request::METHOD_GET, $url);
 
