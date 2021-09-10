@@ -15,8 +15,14 @@ parameters:
 
     excludes_analyse:
         - src/Test/DoctrineOrmTestCase.php
-        # Remove these lines when dropping support for KnpLabs/DoctrineBehaviors < 2.0
-        - tests/Fixtures/Model/Knplabs/TranslatableEntity.php
-        - tests/Fixtures/Model/Knplabs/DeprecatedTranslatableEntity.php
-        - tests/Fixtures/Model/Knplabs/TranslatableEntityTranslation.php
-        - tests/Fixtures/Traits/ORM/Knplabs/ArticleTranslation.php
+
+services:
+    -
+        class: Knp\DoctrineBehaviors\PHPStan\Type\TranslatableTranslateDynamicMethodReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    -
+        class: Knp\DoctrineBehaviors\PHPStan\Type\TranslatableGetTranslationsDynamicMethodReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    -
+        class: Knp\DoctrineBehaviors\PHPStan\Type\TranslationGetTranslatableDynamicMethodReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
