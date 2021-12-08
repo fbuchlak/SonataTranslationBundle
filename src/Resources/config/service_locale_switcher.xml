@@ -9,6 +9,7 @@
             <argument key="$defaultLocale">%kernel.default_locale%</argument>
             <tag name="kernel.event_subscriber"/>
         </service>
+        <!-- NEXT_MAJOR: Remove next service -->
         <service id="sonata_translation.locale_switcher.user_locale_subscriber" class="%sonata_translation.locale_switcher.user_locale_subscriber.class%">
             <tag name="kernel.event_subscriber"/>
         </service>

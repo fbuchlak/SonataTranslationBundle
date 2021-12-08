@@ -15,6 +15,7 @@ namespace Sonata\TranslationBundle\Tests\EventSubscriber;
 
 use PHPUnit\Framework\TestCase;
 use Sonata\TranslationBundle\EventSubscriber\UserLocaleSubscriber;
+use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -23,14 +24,20 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
+ * NEXT_MAJOR: Remove this class.
+ *
  * @author Jonathan Vautrin <jvautrin@pro-info.be>
  */
 final class UserLocaleSubscriberTest extends TestCase
 {
+    use ExpectDeprecationTrait;
+
     /**
      * Check if session locale is set to user locale at login.
      *
      * @dataProvider userLocaleSubscriberDataProvider
+     *
+     * @group legacy
      */
     public function testUserLocaleSubscriber(UserInterface $user, string $expectedLocale): void
     {
@@ -41,6 +48,11 @@ final class UserLocaleSubscriberTest extends TestCase
         $event = $this->getEvent($request, $user);
         $userLocaleSubscriber = new UserLocaleSubscriber();
         static::assertTrue($session->isStarted());
+
+        if (method_exists($user, 'getLocale')) {
+            $this->expectDeprecation('Relying on "Sonata\TranslationBundle\EventSubscriber\UserLocaleSubscriber" for setting the locale of the user in the session after the login is deprecated since sonata-project/translation-bundle 2.x and will not work in version 3.0. Create your own listener following https://symfony.com/index.php/doc/4.4/session/locale_sticky_session.html#setting-the-locale-based-on-the-user-s-preferences.');
+        }
+
         $userLocaleSubscriber->onInteractiveLogin($event);
         static::assertSame($expectedLocale, $session->get('_locale'));
     }
