@@ -19,20 +19,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 final class LocaleProvider implements KnpLocaleProviderInterface
 {
-    private RequestStack $requestStack;
-
-    private KnpLocaleProviderInterface $localeProvider;
-
-    private SonataLocaleProviderInterface $sonataLocaleProvider;
-
-    public function __construct(
-        RequestStack $requestStack,
-        KnpLocaleProviderInterface $localeProvider,
-        SonataLocaleProviderInterface $sonataLocaleProvider
-    ) {
-        $this->requestStack = $requestStack;
-        $this->localeProvider = $localeProvider;
-        $this->sonataLocaleProvider = $sonataLocaleProvider;
+    public function __construct(private RequestStack $requestStack, private KnpLocaleProviderInterface $localeProvider, private SonataLocaleProviderInterface $sonataLocaleProvider)
+    {
     }
 
     public function provideCurrentLocale(): ?string

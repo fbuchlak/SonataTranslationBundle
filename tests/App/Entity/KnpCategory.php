@@ -19,40 +19,32 @@ use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
 
 /** @ORM\Entity */
-class KnpCategory implements TranslatableInterface
+class KnpCategory implements TranslatableInterface, \Stringable
 {
     use TranslatableTrait;
-
-    /**
+    public function __construct(/**
      * @ORM\Id
      * @ORM\Column(type="string")
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private string $id;
-
-    public function __construct(string $id = '', string $name = '')
+    private string $id = '', string $name = '')
     {
-        $this->id = $id;
         $this->translations = new ArrayCollection();
         $this->newTranslations = new ArrayCollection();
         $this->setName($name);
     }
-
     public function __toString(): string
     {
         return (string) $this->getName();
     }
-
     public function getId(): string
     {
         return $this->id;
     }
-
     public function setId(string $id): void
     {
         $this->id = $id;
     }
-
     /**
      * @psalm-suppress UndefinedInterfaceMethod
      */
@@ -60,7 +52,6 @@ class KnpCategory implements TranslatableInterface
     {
         return $this->translate()->getName();
     }
-
     /**
      * @psalm-suppress UndefinedInterfaceMethod
      */
